@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Drop.Application;
+using Drop.Application.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Drop.Api
@@ -41,7 +44,7 @@ namespace Drop.Api
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    // var messengers = context.RequestServices.GetRequiredService<IEnumerable<IMessenger>>(); // Resolve all instances
+                    var messengers = context.RequestServices.GetRequiredService<IEnumerable<IMessenger>>(); // Resolve all instances
                     // var messenger1 = context.RequestServices.GetRequiredService<IMessenger>(); //Service locator
                     // var messenger2 = context.RequestServices.GetRequiredService<IMessenger>(); //Service locator
                     // await context.Response.WriteAsync($"{messenger1.GetMessage()} {messenger2.GetMessage()}");

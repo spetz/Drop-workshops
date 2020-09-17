@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Drop.Api
 {
@@ -12,9 +13,11 @@ namespace Drop.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); })
+                .UseSerilog((context, config) =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    config.WriteTo.Console();
+                    // .WriteTo.Seq("http://localhost:5341");
                 });
     }
 }
