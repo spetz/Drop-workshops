@@ -27,6 +27,7 @@ namespace Drop.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplication();
+            services.AddScoped<DummyMiddleware>();
             services.Configure<ApiOptions>(_configuration.GetSection("api"));
         }
 
@@ -37,7 +38,32 @@ namespace Drop.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.Use(async (ctx, next) =>
+            {
+                Console.WriteLine("I'm the first middleware");
+                await next();
+            });
+            
+            app.Use(async (ctx, next) =>
+            {
+                Console.WriteLine("I'm the second middleware");
+                await next();
+            });
+            
+            app.Use(async (ctx, next) =>
+            {
+                if (ctx.Request.Query.TryGetValue("token", out var token) && token == "secret")
+                {
+                    await ctx.Response.WriteAsync("Secret");
+                    return;    
+                }
+                
+                await next();
+            });
 
+            app.UseMiddleware<DummyMiddleware>();
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
