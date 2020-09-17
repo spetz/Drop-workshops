@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using Drop.Application;
+using Drop.Application.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +16,7 @@ namespace Drop.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplication();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,7 +33,10 @@ namespace Drop.Api
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Drop API");
+                    var messengers = context.RequestServices.GetRequiredService<IEnumerable<IMessenger>>(); // Resolve all instances
+                    var messenger1 = context.RequestServices.GetRequiredService<IMessenger>(); //Service locator
+                    var messenger2 = context.RequestServices.GetRequiredService<IMessenger>(); //Service locator
+                    await context.Response.WriteAsync($"{messenger1.GetMessage()} {messenger2.GetMessage()}");
                 });
 
                 endpoints.MapGet("parcels/{parcelId:guid}", async context =>
