@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -28,7 +29,20 @@ namespace Drop.Api
             {
                 endpoints.MapGet("/", async context =>
                 {
-                    await context.Response.WriteAsync("Hello World!");
+                    await context.Response.WriteAsync("Drop API");
+                });
+
+                endpoints.MapGet("parcels/{parcelId:guid}", async context =>
+                {
+                    var parcelId = Guid.Parse(context.Request.RouteValues["parcelId"].ToString());
+                    if (parcelId == Guid.Empty)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status404NotFound;
+                        return;
+                    }
+
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync("{}");
                 });
             });
         }
