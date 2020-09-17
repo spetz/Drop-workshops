@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Drop.Api
@@ -28,16 +26,19 @@ namespace Drop.Api
         {
             services.AddApplication();
             services.AddScoped<DummyMiddleware>();
+            services.AddScoped<ErrorHandlerMiddleware>();
             services.Configure<ApiOptions>(_configuration.GetSection("api"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            // if (env.IsDevelopment())
+            // {
+            //     app.UseDeveloperExceptionPage();
+            // }
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             
             app.Use(async (ctx, next) =>
             {
