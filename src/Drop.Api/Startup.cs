@@ -44,6 +44,13 @@ namespace Drop.Api
                     context.Response.ContentType = "application/json";
                     await context.Response.WriteAsync("{}");
                 });
+
+                endpoints.MapPost("parcels", async context =>
+                {
+                    var parcelId = Guid.NewGuid();
+                    context.Response.Headers.Add("Location", $"parcels/{parcelId}");
+                    context.Response.StatusCode = StatusCodes.Status201Created;
+                });
             });
         }
     }

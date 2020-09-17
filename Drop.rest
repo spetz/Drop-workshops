@@ -2,3 +2,9 @@
 
 ###
 GET {{url}}
+
+###
+POST {{url}}/parcels
+
+{
+}
