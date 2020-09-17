@@ -7,7 +7,7 @@ namespace Drop.Application.Services
 {
     public interface IParcelsService
     {
-        Task<ParcelDto> Get(Guid parcelId);
-        Task Add(AddParcel parcel);
+        Task<ParcelDto> GetAsync(Guid parcelId);
+        Task AddAsync(AddParcel command);
     }
 }

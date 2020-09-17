@@ -82,7 +82,9 @@ namespace Drop.Api
                 endpoints.MapGet("parcels/{parcelId:guid}", async context =>
                 {
                     var parcelId = Guid.Parse(context.Request.RouteValues["parcelId"].ToString());
-                    if (parcelId == Guid.Empty)
+                    var parcelsService = context.RequestServices.GetRequiredService<IParcelsService>();
+                    var parcel = await parcelsService.GetAsync(parcelId);
+                    if (parcel is null)
                     {
                         context.Response.StatusCode = StatusCodes.Status404NotFound;
                         return;
@@ -95,6 +97,8 @@ namespace Drop.Api
                 endpoints.MapPost("parcels", async context =>
                 {
                     var parcelId = Guid.NewGuid();
+                    var parcelsService = context.RequestServices.GetRequiredService<IParcelsService>();
+                    // parcelsService.Add()
                     context.Response.Headers.Add("Location", $"parcels/{parcelId}");
                     context.Response.StatusCode = StatusCodes.Status201Created;
                 });

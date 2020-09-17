@@ -10,6 +10,7 @@ namespace Drop.Application
         {
             services.AddScoped<IMessenger, Messenger>();
             services.AddScoped<IMessenger, MessengerV2>();
+            services.AddScoped<IParcelsService, ParcelsService>();
 
             return services;
         }
