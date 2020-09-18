@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 namespace Drop.Api
@@ -32,6 +33,14 @@ namespace Drop.Api
             services.AddScoped<DummyMiddleware>();
             services.AddScoped<ErrorHandlerMiddleware>();
             services.Configure<ApiOptions>(_configuration.GetSection("api"));
+            services.AddSwaggerGen(swagger =>
+            {
+                swagger.SwaggerDoc("Drop", new OpenApiInfo
+                {
+                    Title = "Drop API",
+                    Version = "v1"
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +50,12 @@ namespace Drop.Api
             // {
             //     app.UseDeveloperExceptionPage();
             // }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(swagger =>
+            {
+                swagger.SwaggerEndpoint("/swagger/Drop/swagger.json", "Drop API v1");
+            });
 
             app.UseMiddleware<ErrorHandlerMiddleware>();
             
