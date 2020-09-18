@@ -1,4 +1,5 @@
 using System;
+using Drop.Core.Exceptions;
 
 namespace Drop.Core.ValueObjects
 {
@@ -10,7 +11,7 @@ namespace Drop.Core.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentException(value);
+                throw new InvalidAddressException(value);
             }
         
             Value = value;
