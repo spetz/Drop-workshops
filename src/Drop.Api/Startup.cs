@@ -4,6 +4,7 @@ using System.IO;
 using Drop.Application;
 using Drop.Application.Commands;
 using Drop.Application.Services;
+using Drop.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +31,7 @@ namespace Drop.Api
         {
             services.AddControllers().AddNewtonsoftJson();
             services.AddApplication();
+            services.AddInfrastructure();
             services.AddScoped<DummyMiddleware>();
             services.AddScoped<ErrorHandlerMiddleware>();
             services.Configure<ApiOptions>(_configuration.GetSection("api"));
