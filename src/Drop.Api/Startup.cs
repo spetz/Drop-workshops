@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using Drop.Application;
+using Drop.Application.Commands;
 using Drop.Application.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Drop.Api
 {
@@ -90,16 +95,23 @@ namespace Drop.Api
                         return;
                     }
 
+                    // var json = JsonSerializer.Serialize(parcel);
+                    var json = JsonConvert.SerializeObject(parcel);
                     context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync("{}");
+                    await context.Response.WriteAsync(json);
                 });
 
                 endpoints.MapPost("parcels", async context =>
                 {
-                    var parcelId = Guid.NewGuid();
                     var parcelsService = context.RequestServices.GetRequiredService<IParcelsService>();
-                    // parcelsService.Add()
-                    context.Response.Headers.Add("Location", $"parcels/{parcelId}");
+                    var json = await new StreamReader(context.Request.Body).ReadToEndAsync();
+                    var command = JsonConvert.DeserializeObject<AddParcel>(json);
+                    // var command = JsonSerializer.Deserialize<AddParcel>(json, new JsonSerializerOptions
+                    // {
+                    //     PropertyNameCaseInsensitive = true
+                    // });
+                    await parcelsService.AddAsync(command);
+                    context.Response.Headers.Add("Location", $"parcels/{command.Id}");
                     context.Response.StatusCode = StatusCodes.Status201Created;
                 });
             });

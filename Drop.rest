@@ -4,7 +4,12 @@
 GET {{url}}
 
 ###
+GET {{url}}/parcel/ab1ea769-8387-4aa8-9e27-2b2134b3de0f
+
+###
 POST {{url}}/parcels
 
 {
+  "address": "Test",
+  "size": "large",
 }
