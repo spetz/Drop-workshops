@@ -1,5 +1,6 @@
 using Drop.Core.Repositories;
 using Drop.Infrastructure.Caching;
+using Drop.Infrastructure.Mongo;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Drop.Infrastructure
@@ -11,6 +12,7 @@ namespace Drop.Infrastructure
         {
             services.AddMemoryCache();
             services.AddScoped<IParcelsRepository, InMemoryParcelsRepository>();
+            services.AddMongo();
             
             return services;
         }
