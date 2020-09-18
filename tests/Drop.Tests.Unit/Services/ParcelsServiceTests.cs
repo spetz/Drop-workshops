@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Drop.Application.Commands;
 using Drop.Application.Services;
 using Drop.Core.Entities;
 using Drop.Core.Repositories;
@@ -26,6 +27,20 @@ namespace Drop.Tests.Unit.Services
             parcelDto.ShouldNotBeNull();
             parcelDto.Id.ShouldBe(parcel.Id);
             await _parcelsRepository.Received().GetAsync(parcel.Id);
+        }
+        
+        [Fact]
+        public async Task add_parcel_should_succeed_given_valid_size_and_address()
+        {
+            var command = new AddParcel("test", "large");
+            
+            await _parcelsService.AddAsync(command);
+
+            await _parcelsRepository.Received().AddAsync(Arg.Is<Parcel>(x =>
+                x.Id == command.Id &&
+                x.Address == command.Address &&
+                x.Size == ParcelSize.Large &&
+                x.State == ParcelState.New));
         }
 
         private readonly IParcelsService _parcelsService;
