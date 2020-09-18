@@ -11,6 +11,16 @@ GET {{url}}/parcels/cd79e522-ceee-45da-8a64-8fc707ca0cb3
 
 ###
 POST {{url}}/parcels
+Content-Type: application/json
+
+{
+  "address": "Test",
+  "size": "large",
+}
+
+###
+POST {{url}}/api/parcels
+Content-Type: application/json
 
 {
   "address": "Test",
