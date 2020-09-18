@@ -43,6 +43,8 @@ namespace Drop.Api
                     Version = "v1"
                 });
             });
+
+            ConfigureTestServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -133,6 +135,11 @@ namespace Drop.Api
                     context.Response.StatusCode = StatusCodes.Status201Created;
                 });
             });
+        }
+        
+        protected virtual void ConfigureTestServices()
+        {
+                
         }
     }
 }
