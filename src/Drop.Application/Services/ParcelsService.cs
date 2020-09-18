@@ -9,7 +9,7 @@ using Drop.Core.ValueObjects;
 
 namespace Drop.Application.Services
 {
-    internal class ParcelsService : IParcelsService
+    public class ParcelsService : IParcelsService
     {
         private readonly IParcelsRepository _parcelsRepository;
 
