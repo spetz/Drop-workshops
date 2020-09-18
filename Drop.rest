@@ -4,7 +4,10 @@
 GET {{url}}
 
 ###
-GET {{url}}/parcel/ab1ea769-8387-4aa8-9e27-2b2134b3de0f
+GET {{url}}/api
+
+###
+GET {{url}}/parcels/cd79e522-ceee-45da-8a64-8fc707ca0cb3
 
 ###
 POST {{url}}/parcels

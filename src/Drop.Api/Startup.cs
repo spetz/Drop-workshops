@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
 using Drop.Application;
 using Drop.Application.Commands;
 using Drop.Application.Services;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Drop.Api
 {
@@ -29,6 +27,7 @@ namespace Drop.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddNewtonsoftJson();
             services.AddApplication();
             services.AddScoped<DummyMiddleware>();
             services.AddScoped<ErrorHandlerMiddleware>();
@@ -74,6 +73,8 @@ namespace Drop.Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
+                
                 endpoints.MapGet("/", async context =>
                 {
                     var messengers = context.RequestServices.GetRequiredService<IEnumerable<IMessenger>>(); // Resolve all instances
