@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Drop.Application.Commands;
 using Drop.Application.DTO;
+using Drop.Application.Exceptions;
 using Drop.Core.Entities;
 using Drop.Core.Repositories;
 using Drop.Core.ValueObjects;
@@ -36,7 +37,7 @@ namespace Drop.Application.Services
         {
             if (!Enum.TryParse<ParcelSize>(request.Size, true, out var size))
             {
-                throw new ArgumentException(request.Size, nameof(request.Size));
+                throw new InvalidParcelSizeException(request.Size);
             }
         
             var parcel = new Parcel(request.Id, size, request.Address);
