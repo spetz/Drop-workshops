@@ -2,24 +2,34 @@ using System;
 using System.Threading.Tasks;
 using Drop.Core.Entities;
 using Drop.Core.Repositories;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 namespace Drop.Infrastructure.Mongo
 {
-    public class MongoParcelsRepository : IParcelsRepository
+    internal class MongoParcelsRepository : IParcelsRepository
     {
-        public Task<Parcel> GetAsync(Guid id)
+        private readonly IMongoDatabase _database;
+
+        public MongoParcelsRepository(IMongoDatabase database)
         {
-            throw new NotImplementedException();
+            _database = database;
         }
 
-        public Task AddAsync(Parcel parcel)
+        public async Task<Parcel> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var parcelDocument = await Collection.AsQueryable()
+                .SingleOrDefaultAsync(p => p.Id == id);
+            
+            return parcelDocument?.ToEntity();
         }
+
+        public Task AddAsync(Parcel parcel) => Collection.InsertOneAsync(new ParcelDocument(parcel));
 
         public Task UpdateAsync(Parcel parcel)
-        {
-            throw new NotImplementedException();
-        }
+            => Collection.ReplaceOneAsync(p => p.Id == parcel.Id, new ParcelDocument(parcel));
+
+        private IMongoCollection<ParcelDocument> Collection
+            => _database.GetCollection<ParcelDocument>("parcels");
     }
 }
